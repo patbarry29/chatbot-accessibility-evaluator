@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Accessibility Evaluation Tool",
+  "version": "1.0",
+  "description": "An evaluation tool to check the accessibility of the current conversational AI interface.",
+  "background": {
+    "service_worker": "dist/background.bundle.js"
+  },
+  "action": {
+    "default_popup": "src/popup.html"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["dist/content.bundle.js"]
+    }
+  ]
+}
