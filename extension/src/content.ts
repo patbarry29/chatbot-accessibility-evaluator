@@ -23,7 +23,7 @@ function simulateInput(message: string) {
     });
     textEditor.dispatchEvent(keyboardEvent);
   } else if (inputField) {
-    sentMessage = message; // Store the sent message separately
+    sentMessage = message;
     
     inputField.focus();
     inputField.value = message;
@@ -48,12 +48,11 @@ function getDomTextContent(): string[] {
   const elements = document.querySelectorAll('div, span, p');
   return Array.from(elements)
     .map(el => (el as HTMLElement).innerText.trim())
-    .filter(text => text && text !== sentMessage); // Filter out the sent message
+    .filter(text => text && text !== sentMessage);
 }
-
 async function captureResponse(message: string, maxWaitTime = 20000) {
   const startTime = Date.now();
-  
+
   const currentURL = window.location.href;
   const urlRoot = new URL(currentURL).origin;
 
@@ -71,7 +70,7 @@ async function captureResponse(message: string, maxWaitTime = 20000) {
     default:
       throw new Error('Invalid website specified');
   }
-  
+
   const oldDivs = Array.from(document.querySelectorAll(selector));
 
   let finalResponse = '';
@@ -103,15 +102,28 @@ async function captureResponse(message: string, maxWaitTime = 20000) {
     }
   };
 
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  await new Promise(resolve => setTimeout(resolve, 2000));
   await checkForResponse();
+  return finalResponse; // Return the captured response
 }
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'typeMessage') {
-    simulateInput(request.message);
-    captureResponse(request.message);
-    sendResponse({ status: 'Message typed and waiting for response' });
+async function sendAndReceiveMessage(message: string) {
+  simulateInput(message);
+  return await captureResponse(message);
+}
+
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+  if (request.action === 'typeMessages') {
+    let responses = [];
+    for (let i = 0; i < request.messages.length; i++) {
+      const message = request.messages[i];
+      const response = await sendAndReceiveMessage(message); // Wait for response
+      responses.push(response);
+      if (i < request.messages.length - 1) { // Don't wait for the last message
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Wait a bit for the assistant to respond
+      }
+    }
+    sendResponse({ status: 'Messages typed and responses received', responses });
   } else {
     console.error("Unknown action:", request.action);
   }
