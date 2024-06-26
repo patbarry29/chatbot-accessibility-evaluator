@@ -19,6 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     console.error("Button not found.");
   }
+  const identifyButton = document.getElementById('identifyButton');
+  if (identifyButton) {
+    identifyButton.addEventListener('click', () => {
+      chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+        const activeTab = tabs[0];
+        if (activeTab.id) {
+          chrome.tabs.sendMessage(activeTab.id, {action: "startSelection"});
+          window.close(); // Close the popup
+        }
+      });
+    });
+  }
 });
 
 const message1 = `Hello, I am a disabled user. 

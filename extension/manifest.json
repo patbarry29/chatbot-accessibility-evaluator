@@ -7,7 +7,7 @@
     "service_worker": "dist/background.bundle.js"
   },
   "action": {
-    "default_popup": "src/popup.html"
+    "default_popup": "popup.html"
   },
   "permissions": [
     "storage",
