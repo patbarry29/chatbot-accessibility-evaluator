@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const button = document.getElementById('myButton');
+  const button = document.getElementById('chatButton');
   if (button) {
     button.addEventListener('click', () => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {

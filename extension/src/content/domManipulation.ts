@@ -27,6 +27,8 @@ function createOverlay() {
 
 function handleMouseMove(event: MouseEvent): void {
   if (isSelecting && overlay) {
+    event.preventDefault();
+    event.stopPropagation();
     const target = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement;
     if (target && target !== highlightedElement) {
       highlightElement(target);
@@ -54,45 +56,60 @@ function handleClick(event: MouseEvent): void {
     if (target) {
       selectedElements.push(target);
       
-      let chatbotElement = boundingBoxApproach(target) || 
-                           traversalAlgorithm(target) || 
-                           heuristicRules(target);
+      const chatbotElement = identifyChatbotElement(target);
       
       if (chatbotElement) {
         finishSelection(chatbotElement);
       } else {
         if (selectedElements.length >= 3) {
-          chatbotElement = interactiveSelectorTool();
-          if (chatbotElement) {
-            finishSelection(chatbotElement);
+          const interactiveElement = interactiveSelectorTool();
+          if (interactiveElement) {
+            finishSelection(interactiveElement);
           } else {
-            showMessage("Couldn't identify chatbot element. Please try clicking on different parts of the chatbot.");
+            showMessage("Couldn't identify chatbot element. Please try clicking on a different part of the chatbot.");
           }
         } else {
-          showMessage(`Element selected. Please click on ${3 - selectedElements.length} more part(s) of the chatbot.`);
+          showMessage("Couldn't identify chatbot element yet. Please try clicking on a different part of the chatbot.");
         }
       }
     }
   }
 }
 
-// 1. Bounding Box Calculation
-function boundingBoxApproach(element: HTMLElement): HTMLElement | null {
-  // Get the bounding box of the clicked element
-  const elementRect = element.getBoundingClientRect();
+function identifyChatbotElement(target: HTMLElement): HTMLElement | null {
+  const methods = [boundingBoxApproach, traversalAlgorithm, heuristicRules];
+  const results = methods.map(method => method(target));
   
-  // Find the parent that likely contains the entire chatbot
+  const validResults = results.filter(result => result !== null) as HTMLElement[];
+  
+  if (validResults.length >= 2) {
+    // At least two methods agree
+    return validResults[0];
+  }
+  
+  return null;
+}
+
+// 1. Bounding Box Approach
+function boundingBoxApproach(element: HTMLElement): HTMLElement | null {
+  const elementRect = element.getBoundingClientRect();
   let potentialParent = element.parentElement;
+  
   while (potentialParent) {
     const parentRect = potentialParent.getBoundingClientRect();
+    const areaRatio = (parentRect.width * parentRect.height) / (elementRect.width * elementRect.height);
     
-    // Check if the parent's bounding box is significantly larger
-    if (parentRect.width > elementRect.width * 1.5 && parentRect.height > elementRect.height * 1.5) {
-      // Check if this parent contains other chatbot-like elements
-      const inputField = potentialParent.querySelector('input[type="text"]');
-      const messageContainer = potentialParent.querySelector('.messages, .chat-messages');
+    if (areaRatio > 2) { // Parent is significantly larger
+      const childElements = potentialParent.children;
+      let chatbotComponents = 0;
       
-      if (inputField && messageContainer) {
+      for (const child of Array.from(childElements)) {
+        if (child.matches('input[type="text"], textarea, .messages, .chat-messages, button[type="submit"], .send-button')) {
+          chatbotComponents++;
+        }
+      }
+      
+      if (chatbotComponents >= 2) {
         return potentialParent;
       }
     }
@@ -103,17 +120,29 @@ function boundingBoxApproach(element: HTMLElement): HTMLElement | null {
   return null;
 }
 
-// 2. Traversal Algorithm
+// 2. Traversal Algorithm with Component Scoring
 function traversalAlgorithm(element: HTMLElement): HTMLElement | null {
   let currentElement: HTMLElement | null = element;
+  const componentSelectors: string[] = [
+    'input[type="text"]',
+    'textarea',
+    '.messages, .chat-messages',
+    'button[type="submit"], .send-button',
+    '.chat-header, .chat-title',
+    '.user-avatar, .chat-avatar',
+    '.typing-indicator, .typing-dots'
+  ];
   
   while (currentElement && currentElement !== document.body) {
-    // Check if current element contains expected chatbot components
-    const hasInputField = !!currentElement.querySelector('input[type="text"]');
-    const hasMessageContainer = !!currentElement.querySelector('.messages, .chat-messages');
-    const hasSendButton = !!currentElement.querySelector('button[type="submit"], .send-button');
+    let matchCount = 0;
     
-    if (hasInputField && hasMessageContainer && hasSendButton) {
+    for (const selector of componentSelectors) {
+      if (currentElement.querySelector(selector)) {
+        matchCount++;
+      }
+    }
+   
+    if (matchCount >= 2) {
       return currentElement;
     }
     
@@ -123,24 +152,29 @@ function traversalAlgorithm(element: HTMLElement): HTMLElement | null {
   return null;
 }
 
-// 3. Heuristic Rules
+// 3. Heuristic Rules with Depth Analysis
 function heuristicRules(element: HTMLElement): HTMLElement | null {
   let currentElement: HTMLElement | null = element;
+  let depth = 0;
+  const maxDepth = 5;
   
-  while (currentElement && currentElement !== document.body) {
-    // Check for common chatbot-related class names or IDs
+  while (currentElement && currentElement !== document.body && depth < maxDepth) {
     const classAndId = (currentElement.className + ' ' + currentElement.id).toLowerCase();
-    if (classAndId.includes('chat') || classAndId.includes('bot') || classAndId.includes('message')) {
-      // Additional checks for chatbot components
-      const hasInputField = !!currentElement.querySelector('input[type="text"]');
-      const hasMessageContainer = !!currentElement.querySelector('.messages, .chat-messages');
+    const chatbotKeywords = ['chat', 'bot', 'message', 'conversation', 'dialogue'];
+    
+    if (chatbotKeywords.some(keyword => classAndId.includes(keyword))) {
+      const childrenCount = currentElement.children.length;
+      const textContent = currentElement.textContent || '';
+      const hasMultipleChildren = childrenCount > 3;
+      const hasSubstantialText = textContent.length > 100;
       
-      if (hasInputField && hasMessageContainer) {
+      if (hasMultipleChildren && hasSubstantialText) {
         return currentElement;
       }
     }
     
     currentElement = currentElement.parentElement;
+    depth++;
   }
   
   return null;
@@ -233,8 +267,8 @@ function flashGreen(element: HTMLElement): void {
     flashOverlay.style.opacity = '0';
     setTimeout(() => {
       document.body.removeChild(flashOverlay);
-    }, 500);
-  }, 500);
+    }, 1000);
+  }, 1000);
 }
 
 export const elementSelector: ElementSelector = {
