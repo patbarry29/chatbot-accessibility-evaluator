@@ -5,6 +5,7 @@ let isSelecting: boolean = false;
 let highlightedElement: HTMLElement | null = null;
 let selectedElements: HTMLElement[] = [];
 let overlay: HTMLDivElement | null = null;
+let storedChatbotElement: HTMLElement | null = null;
 
 export function startSelection() {
   isSelecting = true;
@@ -224,6 +225,7 @@ function getParents(element: HTMLElement): HTMLElement[] {
 }
 
 function finishSelection(chatbotElement: HTMLElement): void {
+  storedChatbotElement = chatbotElement;
   const chatbotHTML = chatbotElement.outerHTML;
   console.log(chatbotElement);
   flashGreen(chatbotElement);
@@ -231,6 +233,10 @@ function finishSelection(chatbotElement: HTMLElement): void {
     showMessage("Chatbot element identified and HTML stored!");
   });
   resetSelection();
+}
+
+export function getStoredChatbotElement(): HTMLElement | null {
+  return storedChatbotElement;
 }
 
 function resetSelection(): void {
