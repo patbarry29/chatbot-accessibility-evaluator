@@ -11,8 +11,24 @@ export function startSelection() {
   isSelecting = true;
   createOverlay();
   document.body.style.setProperty('cursor', 'crosshair', 'important');
+  
+  // Add event listeners to the main document
   document.addEventListener("mousemove", handleMouseMove);
   document.addEventListener("click", handleClick);
+  
+  // Search for iframes and add event listeners to them
+  const iframes = document.getElementsByTagName('iframe');
+  console.log(iframes)
+  for (let i = 0; i < iframes.length; i++) {
+      const iframe = iframes[i];
+      if (iframe.contentDocument) {
+        iframe.contentDocument.addEventListener("mousemove", handleMouseMove);
+        iframe.contentDocument.addEventListener("click", handleClick);
+      } else {
+        console.warn("Cannot access iframe content. It may be cross-origin.");
+      }
+  }
+
   showMessage("Click on a part of the chatbot. You may need to click multiple times to identify the entire chatbot.");
 }
 
