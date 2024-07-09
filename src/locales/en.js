@@ -1,4 +1,4 @@
-const locale_en = {
+export const locale_en = {
   "act-rules": {
     "QW-ACT-R1": {
       name: "HTML Page has a title",

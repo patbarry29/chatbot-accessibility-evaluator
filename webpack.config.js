@@ -21,14 +21,17 @@ const config = {
     filename: '[name].bundle.js'
   },
   resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.runtime.esm.js'
+    },
     extensions: ['.ts', '.js', '.vue'],
   },
   module: {
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
+        loader: 'ts-loader',
+        options: { appendTsSuffixTo: [/\.vue$/] }
       },
       {
         test: /\.vue$/,

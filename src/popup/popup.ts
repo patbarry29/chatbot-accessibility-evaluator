@@ -1,43 +1,72 @@
+import Vue from 'vue';
+import router from './router';
+import App from './App.vue';
+import { messages } from '../utils/messagesToSend';
+
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app');
+
 document.addEventListener('DOMContentLoaded', () => {
-  const button = document.getElementById('chatButton');
-  if (button) {
-    button.addEventListener('click', () => {
+  const chatButton = document.getElementById('chatButton');
+  if (chatButton) {
+    chatButton.addEventListener('click', () => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (tabs[0]) {
-          chrome.tabs.sendMessage(tabs[0].id!, { action: 'typeMessages', messages }, (response) => {
+        const activeTab = tabs[0];
+        if (activeTab) {
+          chrome.tabs.sendMessage(activeTab.id!, { action: 'typeMessages', messages }, (response) => {
             if (chrome.runtime.lastError) {
               console.error("Error sending message:", chrome.runtime.lastError.message);
             } else {
               console.log(response?.status);
             }
           });
-        } else {
-          console.error("No active tab found.");
         }
       });
     });
-  } else {
-    console.error("Button not found.");
   }
+
   const identifyButton = document.getElementById('identifyButton');
   if (identifyButton) {
     identifyButton.addEventListener('click', () => {
       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         const activeTab = tabs[0];
         if (activeTab.id) {
+          // THE ERROR NEVER HAPPENS HERE
           chrome.tabs.sendMessage(activeTab.id, {action: "startSelection"});
-          window.close(); // Close the popup
+          window.close();
         }
       });
     });
   }
+
+  const evaluateButton = document.getElementById('evaluateButton');
+  const evaluatingDiv = document.getElementById('evaluating');
+
+  if (evaluateButton && evaluatingDiv) {
+    evaluateButton.addEventListener('click', () => {
+      evaluatingDiv.style.display = 'block';
+
+      const actRulesCheckbox = document.getElementById('actRulesCheckbox') as HTMLInputElement;
+      const wcagTechniquesCheckbox = document.getElementById('wcagTechniquesCheckbox') as HTMLInputElement;
+
+      const actRules = actRulesCheckbox?.checked ?? false;
+      const wcagTechniques = wcagTechniquesCheckbox?.checked ?? false;
+      // communicate with content.js
+      chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+        const activeTab = tabs[0];
+        if (activeTab.id) {
+          chrome.tabs.sendMessage(activeTab.id, {
+            action: "evaluate",
+            actRules: actRules,
+            wcagTechniques: wcagTechniques
+          });
+        }
+      });
+      // Add your evaluation logic here
+      // When evaluation is complete, you may want to hide the div again:
+      // setTimeout(() => { evaluatingDiv.style.display = 'none'; }, 3000);
+    });
+  }
 });
-
-// const message1 = `Hello, I am a disabled user. 
-// I would like to use your services but I am having trouble navigating your website. 
-// Can you please assist me with a short helpful paragraph?`;
-// const message2 = `Thank you for your help. What can I use you for?`;
-const message1 = `Can you write me a fun very short story about a raccoon buying ice cream?`;
-const message2 = `Thanks but I didn't understand the part when about the ice cream, could you explain it in more detail?`;
-
-const messages = [message1, message2];

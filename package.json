@@ -17,7 +17,7 @@
     "dev": "NODE_ENV=development webpack --watch"
   },
   "dependencies": {
-    "@qualweb/act-rules": "0.6.31",
+    "@qualweb/act-rules": "^0.6.37",
     "@qualweb/locale": "0.1.18",
     "@qualweb/qw-page": "0.2.19",
     "@qualweb/util": "0.5.37",
@@ -60,9 +60,9 @@
     "sass": "^1.26.2",
     "sass-loader": "^10.0.0",
     "ts-loader": "^8.0.0",
-    "typescript": "^4.0.0", 
-    "vue-loader": "^15.4.2",
-    "vue-template-compiler": "^2.6.10",
+    "typescript": "^4.0.0",
+    "vue-loader": "^15.11.1",
+    "vue-template-compiler": "^2.7.16",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.3.10",
     "webpack-extension-reloader": "^1.1.0"

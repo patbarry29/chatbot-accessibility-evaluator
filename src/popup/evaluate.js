@@ -1,50 +1,51 @@
 async function starEvaluation() {
   return new Promise((resolve, reject) => {
-    chrome.devtools.inspectedWindow.eval(
-      `starEvaluation()`, { useContentScriptContext: true }, (response, exception) => {
-        window.console.log("startEvaluation response:", response);
-        window.console.log("startEvaluation exception:", exception);
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, {action: "starEvaluation"}, (response) => {
+        console.log("startEvaluation response:", response);
         resolve(response);
-      })
+      });
+    });
   });
 }
 
 async function evaluateACT() {
   return new Promise((resolve, reject) => {
-    chrome.devtools.inspectedWindow.eval(
-      'evaluateACT()', { useContentScriptContext: true }, (response, exception) => {
-        window.console.log("evaluateACT response:", response);
-        window.console.log("evaluateACT exception:", exception);
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, {action: "evaluateACT"}, (response) => {
+        console.log("evaluateACT response:", response);
         resolve(response);
-      })
+      });
+    });
   });
 }
 
 async function evaluateWCAG() {
   return new Promise((resolve, reject) => {
-    chrome.devtools.inspectedWindow.eval(
-      `evaluateWCAG()`, { useContentScriptContext: true }, (response, exception) => {
-        window.console.log("evaluateWCAG response:", response);
-        window.console.log("evaluateWCAG exception:", exception);
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, {action: "evaluateWCAG"}, (response) => {
+        console.log("evaluateWCAG response:", response);
         resolve(response);
-      })
+      });
+    });
   });
 }
 
 function endingEvaluation() {
   return new Promise((resolve, reject) => {
-    chrome.devtools.inspectedWindow.eval(
-      `endingEvaluation()`, { useContentScriptContext: true }, async(response) => {
-        window.console.log("endingEvaluation response:", response);
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, {action: "endingEvaluation"}, (response) => {
+        console.log("endingEvaluation response:", response);
         resolve(response);
-      })
+      });
+    });
   });
 }
+
 async function getUrl() {
   return new Promise((resolve, reject) => {
-    chrome.runtime.sendMessage({ type: 'url', tabId: chrome.devtools.inspectedWindow.tabId }, (response) => {
-      //console.log("response url" + response.url);
-      resolve(response.url);
-    })
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      resolve(tabs[0].url);
+    });
   });
 }
