@@ -1,10 +1,23 @@
-async function starEvaluation() {
+async function startEvaluation() {
   return new Promise((resolve, reject) => {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, {action: "starEvaluation"}, (response) => {
-        console.log("startEvaluation response:", response);
-        resolve(response);
-      });
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError);
+        reject(chrome.runtime.lastError);
+      }
+      if (tabs[0]) {
+        chrome.tabs.sendMessage(tabs[0].id, {action: "startEvaluation"}, (response) => {
+          if (chrome.runtime.lastError) {
+            console.error(chrome.runtime.lastError);
+            reject(chrome.runtime.lastError);
+          } else {
+            console.log("startEvaluation response:", response);
+            resolve(response);
+          }
+        });
+      } else {
+        reject(new Error("No active tab found"));
+      }
     });
   });
 }

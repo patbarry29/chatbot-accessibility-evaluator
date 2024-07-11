@@ -48,8 +48,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true; // Indicates that the response is sent asynchronously
   } else if (request.action === "startSelection") {
     elementSelector.startSelection();
-  } else if (request.action === "evaluate") {
-    startEvaluation(request.actRules, request.wcagTechniques);
+  } else if (request.action === "startEvaluation") {
+    console.log('startEvaluation received');
+    const result = startEvaluation(request.actRules, request.wcagTechniques);
+    sendResponse(result);
+  } else if (request.action === "endingEvaluation") {
+    console.log('endingEvaluation received');
+    const result = endingEvaluation();
+    sendResponse(result);
   } else {
     console.error("Unknown action:", request.action);
   }
@@ -74,24 +80,24 @@ function startEvaluation(actRules: boolean, wcagTechniques: boolean) {
 }
 
 function evaluateACT() {
-  // let actResult, result;
-  // const includedRules: string[] = [
-  //   'QW-ACT-R1', 'QW-ACT-R2', 'QW-ACT-R3', 'QW-ACT-R4', 
-  //   'QW-ACT-R5', 'QW-ACT-R6', 'QW-ACT-R7', 'QW-ACT-R8'
-  // ];
+  let actResult, result;
+  const includedRules: string[] = [
+    'QW-ACT-R1', 'QW-ACT-R2', 'QW-ACT-R3', 'QW-ACT-R4', 
+    'QW-ACT-R5', 'QW-ACT-R6', 'QW-ACT-R7', 'QW-ACT-R8'
+  ];
   window.act = new ACTRules({ translate: locale_en, fallback: locale_en });
-  // window.act.configure({ rules: includedRules })
-  // console.log('configured ACT')
-  // //window.act.validateFirstFocusableElementIsLinkToNonRepeatedContent();
-  // window.act.executeAtomicRules();
-  // console.log('executed atomic rules')
-  // window.act.executeCompositeRules();
-  // console.log('executed composite rules')
-  // actResult = window.act.getReport();
-  // addValuesToSummary(summary, actResult);
-  // //window.console.log("evaluate ACT summary:", summary);
-  // result = actResult.assertions;
-  // return result;
+  window.act.configure({ rules: includedRules })
+  console.log('configured ACT')
+  //window.act.validateFirstFocusableElementIsLinkToNonRepeatedContent();
+  window.act.executeAtomicRules();
+  console.log('executed atomic rules')
+  window.act.executeCompositeRules();
+  console.log('executed composite rules')
+  actResult = window.act.getReport();
+  addValuesToSummary(summary, actResult);
+  window.console.log("evaluate ACT summary:", summary);
+  result = actResult.assertions;
+  return result;
 }
 
 // function evaluateWCAG() {
@@ -112,10 +118,10 @@ function evaluateACT() {
 //   // invoke function to call custom rules for LLM requirements in this function
 // }
 
-// function endingEvaluation() {
-//   //window.console.log("ending evaluation summary:", summary);
-//   return summary;
-// }
+function endingEvaluation() {
+  console.log("ending evaluation summary:", summary);
+  return summary;
+}
 
 interface Summary {
   passed: number;
@@ -142,7 +148,6 @@ function addValuesToSummary(summary: Summary, report: Report) {
   summary.inapplicable += report.metadata.inapplicable;
   //window.console.log("add values to summary:", summary);
 }
-
 
 // function highlightElement(elements) {
 //   for (let elementResult of elements) {

@@ -12,7 +12,7 @@
       <label>
         <input type="checkbox" id="wcagTechniquesCheckbox" checked> WCAG Techniques
       </label>
-      <button id="evaluateButton">Evaluate Chatbot</button>
+      <button id="evaluateButton" @click="onEvaluateClick">Evaluate Chatbot</button>
     </div>
   </div>
 </template>
@@ -20,8 +20,13 @@
 <script>
 export default {
   name: 'Index',
-  mounted() {
-    console.log('Index component mounted');
+  methods: {
+    onClick(buttonNumber) {
+      console.log(`Button ${buttonNumber} clicked`);
+    },
+    onEvaluateClick() {
+      this.$router.push('/loading');
+    }
   }
 }
 </script>
