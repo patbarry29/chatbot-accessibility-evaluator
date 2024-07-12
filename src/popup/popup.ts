@@ -66,9 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
       });
-      // Add your evaluation logic here
-      // When evaluation is complete, you may want to hide the div again:
-      // setTimeout(() => { evaluatingDiv.style.display = 'none'; }, 3000);
     });
   }
 });

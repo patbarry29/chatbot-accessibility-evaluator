@@ -87,7 +87,7 @@ const config = {
       { from: './node_modules/@qualweb/wcag-techniques/dist/wcag.bundle.js', to: 'wcag.js' },
       { from: 'src/locales/en.js', to: 'locales/en.js' },
       { from: 'src/popup/evaluate.js', to: 'popup/evaluate.js' },
-      { from: 'icons', to: 'icons', ignore: ['icon.xcf'] },
+      { from: 'src/icons', to: 'icons', ignore: ['icon.xcf'] },
       { from: 'src/popup/popup.html', to: 'popup/popup.html', transform: transformHtml },
       { from: 'src/options/options.html', to: 'options/options.html', transform: transformHtml },
       {

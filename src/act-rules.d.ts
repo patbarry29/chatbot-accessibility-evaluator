@@ -7,13 +7,20 @@ declare global {
     getReport(): ACTReport;
   }
 
+  class WCAGTechniques {
+    constructor(locale: any, options?: any);
+    execute(newTabWasOpen: boolean, validation?: any): any;
+    configure(options: { techniques: string[] }): void;
+  }
+
   interface Window {
+    wcag: WCAGTechniques;
     act: ACTRules;
   }
 }
 
 interface ACTReport {
-  assertions: any; // Replace 'any' with a more specific type if possible
+  assertions: Record<string, ACTRule>; // Specify the type of assertions
   metadata: {
     passed: number;
     failed: number;
