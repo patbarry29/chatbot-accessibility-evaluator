@@ -37,7 +37,6 @@ export default {
   methods: {
     ...mapActions(["setEvaluated"]),
     onClick(buttonNumber) {
-      console.log(`Button ${buttonNumber} clicked`);
     },
     onEvaluateClick() {
       this.$router.push('/loading');

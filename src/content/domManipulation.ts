@@ -18,7 +18,6 @@ export function startSelection() {
   
   // Search for iframes and add event listeners to them
   const iframes = document.getElementsByTagName('iframe');
-  console.log(iframes)
   for (let i = 0; i < iframes.length; i++) {
       const iframe = iframes[i];
       if (iframe.contentDocument) {
@@ -243,7 +242,6 @@ function getParents(element: HTMLElement): HTMLElement[] {
 function finishSelection(chatbotElement: HTMLElement): void {
   storedChatbotElement = chatbotElement;
   const chatbotHTML = chatbotElement.outerHTML;
-  console.log(chatbotElement);
   flashGreen(chatbotElement);
   chrome.runtime.sendMessage({ action: "storeHTML", html: chatbotHTML }, () => {
     showMessage("Chatbot element identified and HTML stored!");

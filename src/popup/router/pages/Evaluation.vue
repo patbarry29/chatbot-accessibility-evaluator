@@ -1,7 +1,7 @@
 <template>
   <div class="bigContainer">
     <Summary></Summary>
-    <!-- <ColapsibleFilter></ColapsibleFilter>
+    <ColapsibleFilter></ColapsibleFilter>
     <div class="container-1">
       <div class="column-1">
         <ListOfRules v-on:focusContent="focusListContent()"></ListOfRules>
@@ -9,7 +9,7 @@
       <div class="column-2">
         <ListContent ref="content"></ListContent>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -24,11 +24,11 @@ import { mapGetters } from "vuex";
 
 export default {
   components: {
-    // ColapsibleFilter,
+    ColapsibleFilter,
     Summary,
-    // ListOfRules,
-    // ListContent,
-    // FilterByResult
+    ListOfRules,
+    ListContent,
+    FilterByResult
   },
   methods: {
     focusListContent() {

@@ -14,6 +14,7 @@ export const SETHIGHLIGHTACTIVE = "SETHIGHLIGHTACTIVE";
 export const RESET = 'RESET';
 
 
+export const SET_CHATBOT_ELEMENT = 'SET_CHATBOT_ELEMENT';
 
 
 

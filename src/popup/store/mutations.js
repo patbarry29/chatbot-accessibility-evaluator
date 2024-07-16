@@ -61,5 +61,8 @@ export default {
     state.filter = {};
     state.highlightActive = false;
     state.resultFilter = { passed: false, failed: false, warning: false, inapplicable: false };
-  }
+  },
+  [types.SET_CHATBOT_ELEMENT](state, payload) {
+    state.chatbotElement = payload;
+  },
 }

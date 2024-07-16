@@ -1,7 +1,7 @@
 declare global {
   class ACTRules {
     constructor(options: { translate: any, fallback: any });
-    configure(options: { rules: string[] }): void;
+    configure(options: { rules?: string[], exclude?: string[] }): void;
     executeAtomicRules(): void;
     executeCompositeRules(): void;
     getReport(): ACTReport;
@@ -10,7 +10,7 @@ declare global {
   class WCAGTechniques {
     constructor(locale: any, options?: any);
     execute(newTabWasOpen: boolean, validation?: any): any;
-    configure(options: { techniques: string[] }): void;
+    configure(options: { techniques?: string[], exclude?: string[] }): void;
   }
 
   interface Window {
