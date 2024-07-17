@@ -1,0 +1,1 @@
+// file to implement chatbot accessibility rules
