@@ -6,9 +6,6 @@
       <div class="column-1">
         <ListOfRules v-on:focusContent="focusListContent()"></ListOfRules>
       </div>
-      <div class="column-2">
-        <ListContent ref="content"></ListContent>
-      </div>
     </div>
   </div>
 </template>
@@ -18,23 +15,24 @@
 import ColapsibleFilter from "../../components/ColapsibleFilter.vue";
 import Summary from "../../components/Summary.vue";
 import ListOfRules from "../../components/ListOfRules.vue";
-import ListContent from "../../components/ListContent.vue";
 import FilterByResult from "../../components/FilterByResult.vue";
-import { mapGetters } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   components: {
     ColapsibleFilter,
     Summary,
     ListOfRules,
-    ListContent,
     FilterByResult
   },
   methods: {
-    focusListContent() {
-     try{
-      this.$refs.content.$el.focus();}
-      catch(e){}
+    ...mapActions(['updateCurrentRule']),
+    focusListContent(clickedElement) {
+      // Update the currentRule in the Vuex store
+      this.updateCurrentRule(clickedElement);
+      
+      // Change the route to 'rule-content'
+      this.$router.push({ name: 'rule-content' });
     }
   }
 };
@@ -48,11 +46,9 @@ export default {
   height: 100%;
   overflow: hidden;
   margin-left: 0.2rem;
-
-  
 }
 .bigContainer {
-  height: 100vh;
+  min-height: 150vh;
   display: flex;
   flex-direction: column;
   background-color: #303030;
@@ -60,9 +56,8 @@ export default {
 .container-1 {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  overflow: auto;
+  overflow: hidden;
   background-color: #393939;
-  height: 82vh;
   /*
       grid-column-gap:1rem;
       grid-row-gap:1rem;

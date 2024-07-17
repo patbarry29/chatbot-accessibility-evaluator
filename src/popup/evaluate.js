@@ -26,7 +26,6 @@ async function evaluateACT() {
   return new Promise((resolve, reject) => {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, {action: "evaluateACT"}, (response) => {
-        console.log("evaluateACT response:", response);
         resolve(response);
       });
     });
@@ -37,7 +36,6 @@ async function evaluateWCAG() {
   return new Promise((resolve, reject) => {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, {action: "evaluateWCAG"}, (response) => {
-        console.log("evaluateWCAG response:", response);
         resolve(response);
       });
     });
@@ -48,7 +46,6 @@ function endingEvaluation() {
   return new Promise((resolve, reject) => {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, {action: "endingEvaluation"}, (response) => {
-        console.log("endingEvaluation response:", response);
         resolve(response);
       });
     });

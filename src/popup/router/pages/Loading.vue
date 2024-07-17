@@ -58,6 +58,7 @@ export default {
   text-align: center;
 }
 .container {
+  min-height: 50vh;
   height: 100%;
   display: flex;
   align-items: center;
