@@ -8,12 +8,22 @@
       </div>
       <hr>
       <div class="evaluation-container">
-        <label>
-          <input type="checkbox" id="actRulesCheckbox" v-model="actValue" @change="updateEvaluated('act', actValue)"> ACT Rules
-        </label>
-        <label>
-          <input type="checkbox" id="wcagTechniquesCheckbox" v-model="htmlValue" @change="updateEvaluated('html', htmlValue)"> WCAG Techniques
-        </label>
+        <Checkbox 
+          idValue="actRulesCheckbox" 
+          :label="'ACT Rules'" 
+          :value="actValue" 
+          @checkBoxChanged="updateEvaluated('act', $event)" 
+          bgColor="#e15500" 
+          checkColor="#ffffff"
+        />
+        <Checkbox 
+          idValue="wcagTechniquesCheckbox" 
+          :label="'WCAG Techniques'" 
+          :value="htmlValue" 
+          @checkBoxChanged="updateEvaluated('html', $event)" 
+          bgColor="#e15500" 
+          checkColor="#ffffff"
+        />
         <button id="evaluateButton" @click="onEvaluateClick" :disabled="isDisabled">Evaluate Chatbot</button>
       </div>
     </div>
@@ -22,9 +32,13 @@
 
 <script>
   import { mapActions, mapGetters } from "vuex";
+  import Checkbox from '../../components/Checkbox';
 
   export default {
     name: 'Index',
+    components: {
+      Checkbox
+    },
     data() {
       return {
         actValue: false,
@@ -39,8 +53,6 @@
     },
     methods: {
       ...mapActions(["setEvaluated"]),
-      onClick(buttonNumber) {
-      },
       onEvaluateClick() {
         this.$router.push('/loading');
       },
@@ -52,7 +64,6 @@
       }
     },
     mounted() {
-      // Initialize checkbox values from Vuex store
       if (this.evaluated) {
         this.actValue = this.evaluated.act || false;
         this.htmlValue = this.evaluated.html || false;
@@ -94,7 +105,7 @@
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
     width: 100%;
     max-width: 250px;
   }

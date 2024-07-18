@@ -7,6 +7,7 @@ import { addValuesToSummary, filterResults } from '../utils/evaluationHelpers';
 export let responses: ResponseStore = {};
 let sentMessage: string = '';
 let summary: Summary;
+let chatbotSummary: Summary;
 
 export function getSentMessage(): string {
   return sentMessage;
@@ -31,7 +32,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       break;
     case "startEvaluation":
       summary = { passed: 0, failed: 0, warning: 0, inapplicable: 0, title: document.title };
-      sendResponse(summary);
+      chatbotSummary = { passed: 0, failed: 0, warning: 0, inapplicable: 0, title: document.title };
+      sendResponse([summary, chatbotSummary]);
       break;
     case "evaluateACT":
       const actResult = evaluateACT(chatbotElement);
@@ -42,7 +44,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse(wcagResult);
       break;
     case "endingEvaluation":
-      sendResponse(summary);
+      sendResponse([summary, chatbotSummary]);
       break;
     default:
       console.error("Unknown action:", request.action);
@@ -73,7 +75,7 @@ async function handleTypeMessages(request: { messages: string[] }, chatbotElemen
 }
 
 function evaluateACT(chatbotElement: HTMLElement|null) {
-  let actResult, result;
+  let actResult, chatbotActResult, result, chatbotResult;
   const excludedRules = [
     'QW-ACT-R1', 'QW-ACT-R2', 'QW-ACT-R3', 'QW-ACT-R4', 'QW-ACT-R5', 'QW-ACT-R6', 'QW-ACT-R7', 'QW-ACT-R8'
   ];
@@ -83,29 +85,33 @@ function evaluateACT(chatbotElement: HTMLElement|null) {
   window.act.executeAtomicRules();
   window.act.executeCompositeRules();
   actResult = window.act.getReport();
-  if (chatbotElement) {
-    filterResults(actResult, chatbotElement);
-  };
   addValuesToSummary(summary, actResult);
   //window.console.log("evaluate ACT summary:", summary);
   result = actResult.assertions;
-  return result;
+  if (chatbotElement) {
+    chatbotActResult = filterResults(actResult, chatbotElement);
+    addValuesToSummary(chatbotSummary, chatbotActResult);
+    chatbotResult = chatbotActResult.assertions;
+  };
+  return [result, chatbotResult];
 }
 
 function evaluateWCAG(chatbotElement: HTMLElement|null) {
-  let htmlResult, result;
+  let htmlResult, chatbotHtmlResult, result, chatbotResult;
   const excludedTechniques = [
     'QW-WCAG-T14', 'QW-WCAG-T15', 'QW-WCAG-T16', 'QW-WCAG-T17', 'QW-WCAG-T18', 'QW-WCAG-T19', 'QW-WCAG-T20', 'QW-WCAG-T21', 'QW-WCAG-T22'
   ];
   window.wcag = new WCAGTechniques({ translate: locale_en, fallback: locale_en });
   // window.wcag.configure({ exclude: excludedTechniques })
   htmlResult = window.wcag.execute(false);
-  if (chatbotElement) {
-    htmlResult = filterResults(htmlResult, chatbotElement);
-  };
   addValuesToSummary(summary, htmlResult);
   result = htmlResult.assertions;
-  return result;
+  if (chatbotElement) {
+    chatbotHtmlResult = filterResults(htmlResult, chatbotElement);
+    addValuesToSummary(chatbotSummary, chatbotHtmlResult);
+    chatbotResult = chatbotHtmlResult.assertions;
+  };
+  return [result, chatbotResult];
 }
 
 function evaluateChatbot() {

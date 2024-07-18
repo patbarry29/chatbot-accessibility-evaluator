@@ -26,8 +26,14 @@ export const setHighlightActive = ({ commit }, payload) => {
 export const setACT = ({ commit }, payload) => {
   commit(types.SETACT, payload)
 }
+export const setChatbotACT = ({ commit }, payload) => {
+  commit(types.SETCHATBOTACT, payload)
+}
 export const setHTML = ({ commit }, payload) => {
   commit(types.SETHTML, payload)
+}
+export const setChatbotHTML = ({ commit }, payload) => {
+  commit(types.SETCHATBOTHTML, payload)
 }
 export const setBP = ({ commit }, payload) => {
   commit(types.SETBP, payload)
@@ -37,6 +43,9 @@ export const setCSS = ({ commit }, payload) => {
 }
 export const setSummary = ({ commit }, payload) => {
   commit(types.SETSUMMARY, payload)
+}
+export const setChatbotSummary = ({ commit }, payload) => {
+  commit(types.SETCHATBOTSUMMARY, payload)
 }
 export const setEvaluated = ({ commit }, payload) => {
   commit(types.SETEVAL, payload)
@@ -53,6 +62,10 @@ export const setResultFilter = ({ commit }, payload) => {
 }
 export const setStartingResultFilter = ({ commit }, payload) => {
   commit(types.SETALLRESULTFILTER,payload)
+}
+
+export const setEvaluateChatbot = ({ commit }, payload) => {
+  commit(types.SETEVALUATECHATBOT, payload)
 }
 
 export const reset = ({ commit }) => {

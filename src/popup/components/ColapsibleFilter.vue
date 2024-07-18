@@ -51,7 +51,7 @@
           </li>
         </ul>
       </div>
-      <div class="column">
+      <div class="column border">
         <p>Module</p>
         <ul class="module">
           <li>
@@ -76,6 +76,21 @@
           </li>
         </ul>
       </div>
+      <div class="column">
+        <p>Evaluation Type</p>
+        <ul class="evalType">
+          <li>
+            <Checkbox
+              :idValue="chatbotIdValue"
+              :label="chatbotLabel"
+              :bgColor="bgColor"
+              :checkColor="checkColor"
+              @checkBoxChanged="updateEvalType"
+              :value="evaluateChatbot"
+            ></Checkbox>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -93,6 +108,8 @@ export default {
       actLabel: "ACT Rules",
       tecniquesIdValue: "html",
       tecniquesLabel: "WCAG 2.1 Techniques",
+      chatbotIdValue: "chatbot",
+      chatbotLabel: "Chatbot",
       passedIdValue: "passed",
       passedLabel: "Passed",
       failedIdValue: "failed",
@@ -108,30 +125,32 @@ export default {
       checkColor: "black"
     };
   },
-  computed: mapGetters({ filter: "getFilter" }),
+  computed: {
+    ...mapGetters({
+      filter: "getFilter",
+      evaluateChatbot: "getEvaluateChatbot"
+    })
+  },
   methods: {
-    ...mapActions(["setFilter"]),
+    ...mapActions(["setFilter", "setEvaluateChatbot"]),
 
     changeState() {
       this.isOpen = !this.isOpen;
     },
     async updateFilter(idValue, value) {
-      //console.log("updating filter");
       await this.setFilter({
         key: idValue,
         value: value
       });
+    },
+    async updateEvalType(_, value) {
+      await this.setEvaluateChatbot(value);
     }
   },
   components: {
     Checkbox
   }
 };
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) 
-.active,
-.collapsible:hover {
-  background-color: #858586;
-}*/
 </script>
 
 <style scoped>
@@ -146,7 +165,7 @@ p {
   margin-top: 0rem;
 }
 .column {
-  width: 100%;
+  width: 33.33%;
   padding: 1rem;
   padding-bottom: 0rem;
 }
@@ -189,6 +208,8 @@ p {
   background-color: #383838;
   border-radius: 0.2rem;
   border: 0.01em solid #888585;
+  display: flex; /* Added to enable flexbox layout */
+  /* flex-wrap: wrap; Allow content to wrap into multiple rows if necessary */
 }
 .none {
   display: none;

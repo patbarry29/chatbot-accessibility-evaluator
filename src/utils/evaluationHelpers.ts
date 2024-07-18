@@ -28,7 +28,7 @@ function filterResults(result: Report, chatbotElement: HTMLElement): Report {
       newMetadata.warning += (rule.metadata.warning > 0) ? 1:0;
       newMetadata.inapplicable += (rule.metadata.inapplicable > 0) ? 1:0;
       
-      console.log(`Rule ${ruleCode} is relevant for this chatbot`);
+      // console.log(`Rule ${ruleCode} is relevant for this chatbot`);
     }
   }
 

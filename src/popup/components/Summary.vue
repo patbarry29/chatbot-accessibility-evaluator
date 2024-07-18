@@ -7,30 +7,31 @@
         <HighlightAll class="export"></HighlightAll>
       </div>
       <div class="text">
-        <h1 class="title">{{summary.title}}</h1>
+        <h1 class="title">{{ currentSummary.title }}</h1>
       </div>
     </div>
     <div class="center">
-      <h2
-        class="text"
-      >{{summary.failed + summary.passed + summary.warning + summary.inapplicable }} tested rules and techniques</h2>
+      <h2 class="text">
+        {{ currentSummary.failed + currentSummary.passed + currentSummary.warning + currentSummary.inapplicable }}
+        tested rules and techniques
+      </h2>
     </div>
     <div class="flex-container2">
       <div>
         <i aria-label="Passed" class="material-icons passed flexElement">check_circle_outline</i>
-        <span class="flexElement">{{summary.passed}}</span>
+        <span class="flexElement">{{ currentSummary.passed }}</span>
       </div>
       <div>
         <i aria-label="Failed" class="material-icons failed flexElement">highlight_off</i>
-        <span class="flexElement">{{summary.failed}}</span>
+        <span class="flexElement">{{ currentSummary.failed }}</span>
       </div>
       <div>
         <i aria-label="Warning" class="material-icons warning flexElement">warning</i>
-        <span class="flexElement">{{summary.warning}}</span>
+        <span class="flexElement">{{ currentSummary.warning }}</span>
       </div>
       <div>
         <i aria-label="Inapplicable" class="material-icons inapplicable flexElement">not_interested</i>
-        <span class="flexElement">{{summary.inapplicable}}</span>
+        <span class="flexElement">{{ currentSummary.inapplicable }}</span>
       </div>
     </div>
   </div>
@@ -41,9 +42,18 @@ import { mapGetters } from "vuex";
 import RunAgain from "./RunAgain.vue";
 import Export from "./Export.vue";
 import HighlightAll from "./HighlightAll.vue";
+
 export default {
   name: "Summary",
-  computed: mapGetters({ summary: "getSummary" }),
+  computed: {
+  ...mapGetters({
+    summary: "getSummary",
+    chatbotSummary: "getChatbotSummary",
+    evaluateChatbot: "getEvaluateChatbot"
+  }),
+  currentSummary() {
+    return this.evaluateChatbot ? this.chatbotSummary : this.summary;
+  },
   data() {
     return {
       title: "failed"
@@ -54,9 +64,12 @@ export default {
     Export,
     HighlightAll
   }
+}
 };
 </script>
+
 <style scoped>
+/* Styles remain unchanged */
 .title {
   overflow: hidden;
 }

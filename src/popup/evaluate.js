@@ -11,7 +11,6 @@ async function startEvaluation() {
             console.error(chrome.runtime.lastError);
             reject(chrome.runtime.lastError);
           } else {
-            console.log("startEvaluation response:", response);
             resolve(response);
           }
         });

@@ -37,7 +37,7 @@ export const getResultNumber = (state) => {
 }
 export const getAllRuleCodeAndTitle = (state) => {
     let modules = Object.keys(state["evaluated"]);
-    let evaluated = state["evaluated"];
+    let evaluated = state["evaluated"]; // act/wcag modules
     let filter = state["filter"];
     let keys, ruleOutcome;
     let rules = [];
@@ -46,6 +46,8 @@ export const getAllRuleCodeAndTitle = (state) => {
         if (evaluated[module] && filter[module]) {
             keys = Object.keys(state[module]);
             moduleState = state[module];
+            console.log('keys: ', keys);
+            console.log('moduleState: ', moduleState);
             for (let key of keys) {
                 value = moduleState[key];
                 ruleOutcome = value["metadata"]["outcome"];
@@ -57,7 +59,6 @@ export const getAllRuleCodeAndTitle = (state) => {
     return rules;
 }
 export const getFirstRule = (state) => {
-    //console.log(state);
     let modules = Object.keys(state["evaluated"]);
     let evaluated = state["evaluated"];
     let filter = state["filter"];
@@ -89,13 +90,18 @@ export const getResultFilter = (state) => state.resultFilter
 export const getFilter = (state) => state.filter
 export const getHighlightActive = (state) => state.highlightActive
 export const getSummary = (state) => state.summary
+export const getChatbotSummary = (state) => state.chatbotSummary
 export const getAllData = (state) => {
     return {
         summary: state.summary,
+        chatbotSummary: state.chatbotSummary,
         act: state.act,
+        chatbotAct: state.chatbotAct,
         bp: state.bp,
         html: state.html,
+        chatbotHtml: state.chatbotHtml,
         css: state.css
     }
 }
 
+export const getEvaluateChatbot = (state) => state.evaluateChatbot

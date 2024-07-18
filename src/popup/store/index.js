@@ -9,25 +9,34 @@ Vue.use(Vuex)
 
 export const defaultState = {
   summary: {},
+  chatbotSummary: {},
   evaluated: { act: false, bp: false, css: false, html: false },
   filter: {},
   act: {},
+  chatbotAct: {},
+  html: {},
+  chatbotHtml: {},
   currentRule: {},
   highlightActive:false,
-  resultFilter: { passed: false, failed: false, warning: false, inapplicable: false }
+  resultFilter: { passed: false, failed: false, warning: false, inapplicable: false },
+  evaluateChatbot: false
 }
 
 
 export default new Vuex.Store({
   state: {
     summary: {},
+    chatbotSummary: {},
     evaluated: { act: false, bp: false, css: false, html: false },
     filter: {},
     act: {},
+    chatbotAct: {},
+    html: {},
+    chatbotHtml: {},
     currentRule: {},
     highlightActive:false,
-    resultFilter: { passed: false, failed: false, warning: false, inapplicable: false }
-
+    resultFilter: { passed: false, failed: false, warning: false, inapplicable: false },
+    evaluateChatbot: false
 
   },
   getters,

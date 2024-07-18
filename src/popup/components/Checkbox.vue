@@ -36,7 +36,6 @@ export default {
   methods: {
     
     async onChange() {
-      //console.log("emitcheckBoxChanged");
        this.$emit("checkBoxChanged",this.idValue,this.value);
     },
     focus() {

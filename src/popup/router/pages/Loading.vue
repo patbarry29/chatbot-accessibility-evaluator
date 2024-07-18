@@ -15,12 +15,16 @@ export default {
   methods: {
     ...mapActions([
       "setACT",
+      "setChatbotACT",
       "setHTML",
+      "setChatbotHTML",
       "setBP",
       "setCSS",
       "setSummary",
+      "setChatbotSummary",
       "setCurrentRule",
       "setStartingFilter",
+      "setEvaluateChatbot"
     ]),
     ...mapGetters(["getEvaluated", "getFirstRule","getResultFilter"])
   },
@@ -31,21 +35,25 @@ export default {
   },
   async mounted() {
     let modules = this.getEvaluated();
-    let actResult, bpResult, htmlResult, cssResult, summary;
+    let actResult, chatbotActResult, bpResult, htmlResult, chatbotHtmlResult, cssResult, summary, chatbotSummary;
     await startEvaluation();
     if (modules.act) {
       this.state = "Evaluating ACT module";
-      actResult = await evaluateACT();
+      [actResult, chatbotActResult] = await evaluateACT();
       this.setACT(actResult);
+      chatbotActResult && this.setChatbotACT(chatbotActResult);
     }
     if (modules.html) {
       this.state = "Evaluating WCAG module";
-      htmlResult = await evaluateWCAG();
+      [htmlResult, chatbotHtmlResult] = await evaluateWCAG();
       this.setHTML(htmlResult);
+      chatbotHtmlResult && this.setChatbotHTML(chatbotHtmlResult);
     }
     this.state = "Ending evaluation";
-    summary = await endingEvaluation();
+    [summary, chatbotSummary] = await endingEvaluation();
     this.setSummary(summary);
+    chatbotSummary && this.setChatbotSummary(chatbotSummary);
+    chatbotSummary && this.setEvaluateChatbot(true);
     this.setStartingFilter(modules);
     this.setCurrentRule(this.getFirstRule());
     this.$router.push("/evaluation");

@@ -13,12 +13,17 @@ export default {
   [types.SETHTML](state, payload) {
     state.html = payload
   },
+  [types.SETCHATBOTHTML](state, payload) {
+    state.chatbotHtml = payload
+  },
   [types.SETCSS](state, payload) {
     state.css = payload
   },
   [types.SETSUMMARY](state, payload) {
-
     state.summary = payload;
+  },
+  [types.SETCHATBOTSUMMARY](state, payload) {
+    state.chatbotSummary = payload;
   },
   [types.SETALLFILTER](state, payload) {
     state.filter = payload;
@@ -54,15 +59,18 @@ export default {
   [types.RESET](state) {
     state.evaluated = { act: false, bp: false, css: false, html: false };
     state.act = {};
+    state.chatbotAct = {};
     state.bp = {};
     state.html = {};
+    state.chatbotHtml = {};
     state.css = {};
     state.summary = {};
+    state.chatbotSummary = {};
     state.filter = {};
     state.highlightActive = false;
     state.resultFilter = { passed: false, failed: false, warning: false, inapplicable: false };
-  },
-  [types.SET_CHATBOT_ELEMENT](state, payload) {
-    state.chatbotElement = payload;
-  },
+  }, 
+  [types.SETEVALUATECHATBOT](state, payload) {
+    state.evaluateChatbot = payload;
+  }
 }
