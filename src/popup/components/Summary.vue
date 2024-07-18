@@ -52,6 +52,7 @@ export default {
     evaluateChatbot: "getEvaluateChatbot"
   }),
   currentSummary() {
+    console.log(this.summary, this.chatbotSummary, this.evaluateChatbot);
     return this.evaluateChatbot ? this.chatbotSummary : this.summary;
   },
   data() {
@@ -69,7 +70,6 @@ export default {
 </script>
 
 <style scoped>
-/* Styles remain unchanged */
 .title {
   overflow: hidden;
 }

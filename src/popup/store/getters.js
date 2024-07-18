@@ -36,26 +36,68 @@ export const getResultNumber = (state) => {
     return resultNumber;
 }
 export const getAllRuleCodeAndTitle = (state) => {
-    let modules = Object.keys(state["evaluated"]);
-    let evaluated = state["evaluated"]; // act/wcag modules
-    let filter = state["filter"];
-    let keys, ruleOutcome;
+    // Check evaluateChatbot state if true or false
+    const evaluateChatbot = state.evaluateChatbot;
+
     let rules = [];
-    let value, moduleState;
-    for (let module of modules) {
-        if (evaluated[module] && filter[module]) {
-            keys = Object.keys(state[module]);
-            moduleState = state[module];
-            console.log('keys: ', keys);
-            console.log('moduleState: ', moduleState);
-            for (let key of keys) {
-                value = moduleState[key];
-                ruleOutcome = value["metadata"]["outcome"];
-                if (filter[ruleOutcome])
-                    rules.push({ title: value["name"], code: value["code"], outcome: value["metadata"]["outcome"], module: module });
+
+    if (evaluateChatbot) {
+        const chatbotResults = {
+            act: state.chatbotAct,
+            html: state.chatbotHtml
+        };
+
+        const filter = state.filter;
+        console.log(chatbotResults)
+        for (const [module, results] of Object.entries(chatbotResults)) {
+            console.log(2, module)
+            if (filter[module]) {
+                console.log(3, results)
+                for (const [key, value] of Object.entries(results)) {
+                    console.log(4)
+                    console.log(key, value)
+                    const ruleOutcome = value.metadata.outcome;
+                    if (filter[ruleOutcome]) {
+                        console.log(5)
+                        rules.push({
+                            title: value.name,
+                            code: value.code,
+                            outcome: ruleOutcome,
+                            module: module
+                        });
+                    }
+                }
+            }
+        }
+    } else {
+        // If false, continue as before
+        let modules = Object.keys(state.evaluated);
+        let evaluated = state.evaluated; // act/wcag modules
+        let filter = state.filter;
+        let keys, ruleOutcome;
+        let value, moduleState;
+
+        for (let module of modules) {
+            console.log(module, filter)
+            if (evaluated[module] && filter[module]) {
+                keys = Object.keys(state[module]);
+                moduleState = state[module];
+                for (let key of keys) {
+                    value = moduleState[key];
+                    ruleOutcome = value.metadata.outcome;
+                    if (filter[ruleOutcome]) {
+                        rules.push({
+                            title: value.name,
+                            code: value.code,
+                            outcome: value.metadata.outcome,
+                            module: module
+                        });
+                    }
+                }
             }
         }
     }
+
     return rules;
 }
 export const getFirstRule = (state) => {

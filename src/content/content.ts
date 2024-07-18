@@ -32,7 +32,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       break;
     case "startEvaluation":
       summary = { passed: 0, failed: 0, warning: 0, inapplicable: 0, title: document.title };
-      chatbotSummary = { passed: 0, failed: 0, warning: 0, inapplicable: 0, title: document.title };
+      // only assign chatbotsummary is chatbot element is not null
+      if (chatbotElement) {
+        chatbotSummary = { passed: 0, failed: 0, warning: 0, inapplicable: 0, title: document.title };
+      }
       sendResponse([summary, chatbotSummary]);
       break;
     case "evaluateACT":
