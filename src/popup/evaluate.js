@@ -41,6 +41,16 @@ async function evaluateWCAG() {
   });
 }
 
+async function evaluateBP() {
+  return new Promise((resolve, reject) => {
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, {action: "evaluateBP"}, (response) => {
+        resolve(response);
+      });
+    });
+  });
+}
+
 function endingEvaluation() {
   return new Promise((resolve, reject) => {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {

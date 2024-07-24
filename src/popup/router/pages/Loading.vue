@@ -19,6 +19,7 @@ export default {
       "setHTML",
       "setChatbotHTML",
       "setBP",
+      "setChatbotBP",
       "setCSS",
       "setSummary",
       "setChatbotSummary",
@@ -35,7 +36,7 @@ export default {
   },
   async mounted() {
     let modules = this.getEvaluated();
-    let actResult, chatbotActResult, bpResult, htmlResult, chatbotHtmlResult, cssResult, summary, chatbotSummary;
+    let actResult, chatbotActResult, bpResult, chatbotBpResult, htmlResult, chatbotHtmlResult, cssResult, summary, chatbotSummary;
     await startEvaluation();
     if (modules.act) {
       this.state = "Evaluating ACT module";
@@ -49,6 +50,14 @@ export default {
       this.setHTML(htmlResult);
       chatbotHtmlResult && this.setChatbotHTML(chatbotHtmlResult);
     }
+    // if (modules.bp) {
+    //   this.state = "Evaluating BP module";
+    //   console.log(1)
+    //   // [bpResult, chatbotBpResult] = await evaluateBP();
+    //   // console.log(2)
+    //   // this.setBP(bpResult);
+    //   // chatbotBpResult && this.setChatbotBP(chatbotBpResult);
+    // }
     this.state = "Ending evaluation";
     [summary, chatbotSummary] = await endingEvaluation();
     this.setSummary(summary);

@@ -24,6 +24,14 @@
           bgColor="#e15500" 
           checkColor="#ffffff"
         />
+        <Checkbox 
+          idValue="bestPracticesCheckbox" 
+          :label="'Best Practices'" 
+          :value="bpValue" 
+          @checkBoxChanged="updateEvaluated('bp', $event)" 
+          bgColor="#e15500" 
+          checkColor="#ffffff"
+        />
         <button id="evaluateButton" @click="onEvaluateClick" :disabled="isDisabled">Evaluate Chatbot</button>
       </div>
     </div>
@@ -43,12 +51,13 @@
       return {
         actValue: false,
         htmlValue: false,
+        bpValue: false,
       };
     },
     computed: {
       ...mapGetters({ evaluated: "getEvaluated" }),
       isDisabled() {
-        return !(this.evaluated && (this.evaluated.act || this.evaluated.html));
+        return !(this.evaluated && (this.evaluated.act || this.evaluated.html || this.evaluated.bp));
       }
     },
     methods: {
@@ -67,6 +76,7 @@
       if (this.evaluated) {
         this.actValue = this.evaluated.act || false;
         this.htmlValue = this.evaluated.html || false;
+        this.bpValue = this.evaluated.bp || false;
       }
     }
   }

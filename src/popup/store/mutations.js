@@ -10,6 +10,9 @@ export default {
   [types.SETBP](state, payload) {
     state.bp = payload
   },
+  [types.SETCHATBOTBP](state, payload) {
+    state.chatbotBp = payload
+  },
   [types.SETHTML](state, payload) {
     state.html = payload
   },

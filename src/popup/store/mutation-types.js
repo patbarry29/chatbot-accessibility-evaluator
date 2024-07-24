@@ -4,6 +4,7 @@ export const SETHTML = 'SETHTML';
 export const SETCHATBOTHTML = 'SETCHATBOTHTML';
 export const SETCSS = 'SETCSS';
 export const SETBP = 'SETBP';
+export const SETCHATBOTBP = 'SETCHATBOTBP';
 export const SETSUMMARY = 'SETSUMMARY';
 export const SETCHATBOTSUMMARY = 'SETCHATBOTSUMMARY';
 export const SETEVAL = 'SETEVAL';

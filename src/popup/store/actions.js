@@ -38,6 +38,9 @@ export const setChatbotHTML = ({ commit }, payload) => {
 export const setBP = ({ commit }, payload) => {
   commit(types.SETBP, payload)
 }
+export const setChatbotBP = ({ commit }, payload) => {
+  commit(types.SETCHATBOTBP, payload)
+}
 export const setCSS = ({ commit }, payload) => {
   commit(types.SETCSS, payload)
 }

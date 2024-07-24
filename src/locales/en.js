@@ -1385,5 +1385,25 @@ export const locale_en = {
         F1: "The `lang` and `xml:lang` attributes don't have the same value.",
       },
     },
+    "QW-BP30": {
+      name: "Voice input is available",
+      description:
+        "Ensures that the chatbot has an option to enable voice input",
+      results: {
+        I1: "No test targets found.",
+        P1: "There is a voice input option",
+        F1: "There is no voice input option",
+      },
+    },
+    "QW-BP31": {
+      name: "Voice output is available",
+      description:
+        "Ensures that the chatbot is able to provide voice output",
+      results: {
+        I1: "No test targets found.",
+        P1: "There is voice output",
+        F1: "There is no voice output",
+      },
+    }
   },
 };

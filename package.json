@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@qualweb/act-rules": "^0.6.37",
+    "@qualweb/best-practices": "^0.6.19",
     "@qualweb/locale": "0.1.18",
     "@qualweb/qw-page": "0.2.19",
     "@qualweb/util": "0.5.37",

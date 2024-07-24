@@ -46,6 +46,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       const wcagResult = evaluateWCAG(chatbotElement);
       sendResponse(wcagResult);
       break;
+    case "evaluateBP":
+      console.log(1)
+      const bpResult = evaluateBP(chatbotElement);
+      sendResponse(bpResult);
+      break;
     case "endingEvaluation":
       sendResponse([summary, chatbotSummary]);
       break;
@@ -117,6 +122,20 @@ function evaluateWCAG(chatbotElement: HTMLElement|null) {
   return [result, chatbotResult];
 }
 
-function evaluateChatbot() {
-  // evaluate custom chatbot rules
+function evaluateBP(chatbotElement: HTMLElement|null) {
+  let bpResult, chatbotBpResult, result, chatbotResult;
+  const includedRules = [
+    'QW-BP30', 'QW-BP31'
+  ];
+  window.bp = new BestPractices({ translate: locale_en, fallback: locale_en });
+  window.bp.configure({ bestPractices: includedRules });
+  bpResult = window.bp.execute();
+  addValuesToSummary(summary, bpResult);
+  result = bpResult.assertions;
+  if (chatbotElement) {
+    chatbotBpResult = filterResults(bpResult, chatbotElement);
+    addValuesToSummary(chatbotSummary, chatbotBpResult);
+    chatbotResult = chatbotBpResult.assertions;
+  };
+  return [result, chatbotResult];
 }

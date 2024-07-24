@@ -84,6 +84,7 @@ const config = {
       { from: './node_modules/@qualweb/qw-page/dist/qw-page.bundle.js', to: 'qwPage.js' },
       { from: './node_modules/@qualweb/util/dist/util.bundle.js', to: 'util.js' },
       { from: './node_modules/@qualweb/act-rules/dist/act.bundle.js', to: 'act.js' },
+      // { from: './node_modules/@qualweb/best-practices/dist/bp.bundle.js', to: 'bp.js' },
       { from: './node_modules/@qualweb/wcag-techniques/dist/wcag.bundle.js', to: 'wcag.js' },
       { from: 'src/locales/en.js', to: 'locales/en.js' },
       { from: 'src/popup/evaluate.js', to: 'popup/evaluate.js' },

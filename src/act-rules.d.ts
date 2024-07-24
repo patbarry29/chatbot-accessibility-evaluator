@@ -13,9 +13,17 @@ declare global {
     configure(options: { techniques?: string[], exclude?: string[] }): void;
   }
 
+  class BestPractices {
+    constructor(locale: Translate, options?: BPOptions);
+    configure(options: BPOptions): void;
+    resetConfiguration(): void;
+    execute(): BestPracticesReport;
+  }
+
   interface Window {
     wcag: WCAGTechniques;
     act: ACTRules;
+    bp: BestPractices;
   }
 }
 
