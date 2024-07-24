@@ -48,17 +48,11 @@ export const getAllRuleCodeAndTitle = (state) => {
         };
 
         const filter = state.filter;
-        console.log(chatbotResults)
         for (const [module, results] of Object.entries(chatbotResults)) {
-            console.log(2, module)
             if (filter[module]) {
-                console.log(3, results)
                 for (const [key, value] of Object.entries(results)) {
-                    console.log(4)
-                    console.log(key, value)
                     const ruleOutcome = value.metadata.outcome;
                     if (filter[ruleOutcome]) {
-                        console.log(5)
                         rules.push({
                             title: value.name,
                             code: value.code,
@@ -78,7 +72,6 @@ export const getAllRuleCodeAndTitle = (state) => {
         let value, moduleState;
 
         for (let module of modules) {
-            console.log(module, filter)
             if (evaluated[module] && filter[module]) {
                 keys = Object.keys(state[module]);
                 moduleState = state[module];

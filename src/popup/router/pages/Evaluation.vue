@@ -26,7 +26,6 @@ export default {
     FilterByResult
   },
   methods: {
-    // console.log the chatbotAct value from the store
     ...mapActions(['updateCurrentRule']),
     focusListContent(clickedElement) {
       // Update the currentRule in the Vuex store

@@ -52,7 +52,6 @@ export default {
     evaluateChatbot: "getEvaluateChatbot"
   }),
   currentSummary() {
-    console.log(this.summary, this.chatbotSummary, this.evaluateChatbot);
     return this.evaluateChatbot ? this.chatbotSummary : this.summary;
   },
   data() {
