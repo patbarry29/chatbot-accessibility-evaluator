@@ -30,5 +30,3 @@ export function showMessage(message: string): void {
     }
   }, 5000);
 }
-
-

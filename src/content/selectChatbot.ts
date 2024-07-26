@@ -14,7 +14,7 @@ export function startSelection() {
   
   // Add event listeners to the main document
   document.addEventListener("mousemove", handleMouseMove);
-  document.addEventListener("click", handleClick);
+  document.addEventListener("click", handleClick, true);
   
   // Search for iframes and add event listeners to them
   const iframes = document.getElementsByTagName('iframe');
@@ -22,7 +22,7 @@ export function startSelection() {
       const iframe = iframes[i];
       if (iframe.contentDocument) {
         iframe.contentDocument.addEventListener("mousemove", handleMouseMove);
-        iframe.contentDocument.addEventListener("click", handleClick);
+        iframe.contentDocument.addEventListener("click", handleClick, true);
       } else {
         console.warn("Cannot access iframe content. It may be cross-origin.");
       }
