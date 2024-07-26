@@ -25,6 +25,7 @@
         "dist/util.js",
         "dist/locales/en.js",
         "dist/act.js", 
+        "dist/bp.js", 
         "dist/content.bundle.js", 
         "dist/wcag.js"
       ],

@@ -50,14 +50,12 @@ export default {
       this.setHTML(htmlResult);
       chatbotHtmlResult && this.setChatbotHTML(chatbotHtmlResult);
     }
-    // if (modules.bp) {
-    //   this.state = "Evaluating BP module";
-    //   console.log(1)
-    //   // [bpResult, chatbotBpResult] = await evaluateBP();
-    //   // console.log(2)
-    //   // this.setBP(bpResult);
-    //   // chatbotBpResult && this.setChatbotBP(chatbotBpResult);
-    // }
+    if (modules.bp) {
+      this.state = "Evaluating BP module";
+      [bpResult, chatbotBpResult] = await evaluateBP();
+      // this.setBP(bpResult);
+      // chatbotBpResult && this.setChatbotBP(chatbotBpResult);
+    }
     this.state = "Ending evaluation";
     [summary, chatbotSummary] = await endingEvaluation();
     this.setSummary(summary);

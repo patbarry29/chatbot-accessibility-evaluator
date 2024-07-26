@@ -5,6 +5,7 @@
       <div class="button-container">
         <button id="chatButton">Send and Receive Messages</button>
         <button id="identifyButton">Identify Chatbot</button>
+        <button id="identifyMicButton">Identify Voice Input Button</button>
       </div>
       <hr>
       <div class="evaluation-container">

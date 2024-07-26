@@ -1,8 +1,9 @@
 import { sendAndReceiveMessage } from './chatInteraction';
-import { elementSelector, getStoredChatbotElement } from './domManipulation';
+import { elementSelector, getStoredChatbotElement } from './selectChatbot';
 import { ResponseStore, ChatResponse, Summary } from '../utils/types';
 import { locale_en } from '../locales/en';
 import { addValuesToSummary, filterResults } from '../utils/evaluationHelpers';
+import { microphoneSelector } from './selectVoiceinput';
 
 export let responses: ResponseStore = {};
 let sentMessage: string = '';
@@ -30,6 +31,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     case "startSelection":
       elementSelector.startSelection();
       break;
+    case "startMicSelection":
+      microphoneSelector.startMicrophoneSelection();
+      break;
     case "startEvaluation":
       summary = { passed: 0, failed: 0, warning: 0, inapplicable: 0, title: document.title };
       // only assign chatbotsummary is chatbot element is not null
@@ -47,7 +51,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse(wcagResult);
       break;
     case "evaluateBP":
-      console.log(1)
       const bpResult = evaluateBP(chatbotElement);
       sendResponse(bpResult);
       break;
@@ -110,6 +113,7 @@ function evaluateWCAG(chatbotElement: HTMLElement|null) {
     'QW-WCAG-T14', 'QW-WCAG-T15', 'QW-WCAG-T16', 'QW-WCAG-T17', 'QW-WCAG-T18', 'QW-WCAG-T19', 'QW-WCAG-T20', 'QW-WCAG-T21', 'QW-WCAG-T22'
   ];
   window.wcag = new WCAGTechniques({ translate: locale_en, fallback: locale_en });
+  console.log(window.wcag);
   // window.wcag.configure({ exclude: excludedTechniques })
   htmlResult = window.wcag.execute(false);
   addValuesToSummary(summary, htmlResult);
@@ -132,10 +136,10 @@ function evaluateBP(chatbotElement: HTMLElement|null) {
   bpResult = window.bp.execute();
   addValuesToSummary(summary, bpResult);
   result = bpResult.assertions;
-  if (chatbotElement) {
-    chatbotBpResult = filterResults(bpResult, chatbotElement);
-    addValuesToSummary(chatbotSummary, chatbotBpResult);
-    chatbotResult = chatbotBpResult.assertions;
-  };
+  // if (chatbotElement) {
+  //   chatbotBpResult = filterResults(bpResult, chatbotElement);
+  //   addValuesToSummary(chatbotSummary, chatbotBpResult);
+  //   chatbotResult = chatbotBpResult.assertions;
+  // };
   return [result, chatbotResult];
 }

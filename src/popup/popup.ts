@@ -35,13 +35,27 @@ document.addEventListener('DOMContentLoaded', () => {
       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         const activeTab = tabs[0];
         if (activeTab.id) {
-          // THE ERROR NEVER HAPPENS HERE
           chrome.tabs.sendMessage(activeTab.id, {action: "startSelection"});
           window.close();
         }
       });
     });
   }
+
+
+const identifyMicButton = document.getElementById('identifyMicButton');
+if (identifyMicButton) {
+  identifyMicButton.addEventListener('click', () => {
+    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+      const activeTab = tabs[0];
+      if (activeTab.id) {
+        chrome.tabs.sendMessage(activeTab.id, {action: "startMicSelection"});
+        window.close();
+      }
+    });
+  });
+}
+
 
   const evaluateButton = document.getElementById('evaluateButton');
   const evaluatingDiv = document.getElementById('evaluating');
@@ -52,17 +66,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const actRulesCheckbox = document.getElementById('actRulesCheckbox') as HTMLInputElement;
       const wcagTechniquesCheckbox = document.getElementById('wcagTechniquesCheckbox') as HTMLInputElement;
+      const bestPracticesCheckbox = document.getElementById('bestPracticesCheckbox') as HTMLInputElement;
 
       const actRules = actRulesCheckbox?.checked ?? false;
       const wcagTechniques = wcagTechniquesCheckbox?.checked ?? false;
-      // communicate with content.js
+      const bestPractices = bestPracticesCheckbox?.checked ?? false;
       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         const activeTab = tabs[0];
         if (activeTab.id) {
           chrome.tabs.sendMessage(activeTab.id, {
             action: "evaluate",
             actRules: actRules,
-            wcagTechniques: wcagTechniques
+            wcagTechniques: wcagTechniques,
+            bestPractices: bestPractices
           });
         }
       });
