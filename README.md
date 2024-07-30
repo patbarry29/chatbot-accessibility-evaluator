@@ -1,1 +1,1 @@
-# accessibility-checker-conversational-ai
+# chatbot-accessibility-evaluator
