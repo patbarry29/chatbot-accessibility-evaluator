@@ -24,6 +24,7 @@ declare global {
     wcag: WCAGTechniques;
     act: ACTRules;
     bp: BestPractices;
+    webkitAudioContext: typeof AudioContext;
   }
 }
 

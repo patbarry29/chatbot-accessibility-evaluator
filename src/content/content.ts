@@ -3,7 +3,7 @@ import { elementSelector, getStoredChatbotElement } from './selectChatbot';
 import { ResponseStore, ChatResponse, Summary } from '../utils/types';
 import { locale_en } from '../locales/en';
 import { addValuesToSummary, filterResults } from '../utils/evaluationHelpers';
-import { microphoneSelector } from './selectVoiceinput';
+import { microphoneSelector, getStoredMicrophoneButton } from './selectVoiceinput';
 
 export let responses: ResponseStore = {};
 let sentMessage: string = '';
@@ -41,6 +41,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         chatbotSummary = { passed: 0, failed: 0, warning: 0, inapplicable: 0, title: document.title };
       }
       sendResponse([summary, chatbotSummary]);
+      break;
+    case "startVoiceInput":
+      getStoredMicrophoneButton()?.click();
+      sendResponse(true);
       break;
     case "evaluateACT":
       const actResult = evaluateACT(chatbotElement);

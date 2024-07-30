@@ -49,10 +49,10 @@ function handleClick(event: MouseEvent): void {
   if (isSelecting) {
     event.preventDefault();
     event.stopPropagation();
-    
+
     const clickedElement = event.target as HTMLElement;
     const microphoneButton = findMicrophoneButton(clickedElement);
-    
+
     if (microphoneButton) {
       finishSelection(microphoneButton);
     } else {
@@ -77,9 +77,7 @@ function findMicrophoneButton(element: HTMLElement): HTMLElement | null {
   let checkedParents = 0;
   let currentElement = element.parentElement;
   while (currentElement && currentElement !== document.body && checkedParents < 5) {
-    console.log(`Checking parent: ${currentElement.id}`);
     for (const child of Array.from(currentElement.children)) {
-      console.log(`Checking child: ${child.id}`);
       if (isMicrophoneButton(child as HTMLElement)) {
         return child as HTMLElement;
       }
@@ -93,25 +91,21 @@ function findMicrophoneButton(element: HTMLElement): HTMLElement | null {
 
 function isMicrophoneButton(element: HTMLElement): boolean {
   const micKeywords = ['voice', 'mic', 'microphone', 'audio', 'speak'];
-  console.log('innerText', element.innerText)
   const elementText = element.innerText?.toLowerCase() || '';
-  console.log('className', element.className)
   const elementClasses = (typeof element.className === 'string') ? element.className.toLowerCase() : '';
-  console.log('id', element.id)
   const elementId = element.id?.toLowerCase() || '';
-  console.log('aria-label', element.getAttribute('aria-label'))
   const ariaLabel = element.getAttribute('aria-label')?.toLowerCase() || '';
 
   // Check for microphone-related keywords
-  const hasMicKeyword = micKeywords.some(keyword => 
-    elementText.includes(keyword) || 
-    elementClasses.includes(keyword) || 
+  const hasMicKeyword = micKeywords.some(keyword =>
+    elementText.includes(keyword) ||
+    elementClasses.includes(keyword) ||
     elementId.includes(keyword) ||
     ariaLabel.includes(keyword)
   );
 
   // Check if the element is clickable
-  const isClickable = 
+  const isClickable =
     element.tagName === 'BUTTON' ||
     element.tagName === 'A' ||
     element.getAttribute('role') === 'button' ||

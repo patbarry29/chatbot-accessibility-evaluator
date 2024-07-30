@@ -43,19 +43,35 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-const identifyMicButton = document.getElementById('identifyMicButton');
-if (identifyMicButton) {
-  identifyMicButton.addEventListener('click', () => {
-    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-      const activeTab = tabs[0];
-      if (activeTab.id) {
-        chrome.tabs.sendMessage(activeTab.id, {action: "startMicSelection"});
-        window.close();
-      }
+  const identifyMicButton = document.getElementById('identifyMicButton');
+  if (identifyMicButton) {
+    identifyMicButton.addEventListener('click', () => {
+      chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+        const activeTab = tabs[0];
+        if (activeTab.id) {
+          chrome.tabs.sendMessage(activeTab.id, {action: "startMicSelection"});
+          window.close();
+        }
+      });
     });
-  });
-}
+  }
 
+  const voiceInputButton = document.getElementById("voiceInputButton");
+  if (voiceInputButton) {
+    voiceInputButton.addEventListener("click", () => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const activeTab = tabs[0];
+        if (activeTab?.id) {
+          chrome.tabs.sendMessage(activeTab.id, { action: "startVoiceInput" });
+        }
+      });
+
+      setTimeout(() => {
+        const audio = new Audio("../audio/chatbotClip1.mp3");
+        audio.play();
+      }, 1500);
+    });
+  }
 
   const evaluateButton = document.getElementById('evaluateButton');
   const evaluatingDiv = document.getElementById('evaluating');
