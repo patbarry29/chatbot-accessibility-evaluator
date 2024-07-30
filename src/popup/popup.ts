@@ -66,10 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-      setTimeout(() => {
-        const audio = new Audio("../audio/chatbotClip1.mp3");
-        audio.play();
-      }, 1500);
+      // setTimeout(() => {
+      //   const audio = new Audio("../audio/chatbotClip1.mp3");
+      //   audio.play();
+      // }, 1500);
+
     });
   }
 
