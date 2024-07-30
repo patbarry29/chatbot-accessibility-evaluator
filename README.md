@@ -63,3 +63,21 @@ Next, here are some of the basics of how Vue and Vuex work to better understand 
     - Actions are defined in the [`store/actions.js`](src/popup/store/actions.js) file. These are used to perform asynchronous operations and commit mutations to change the state.
     - Mutations are defined in the [`store/mutations.js`](src/popup/store/mutations.js) file. They are responsible for directly modifying the state in a synchronous manner. Mutation types, typically defined in a separate file, are constants used to maintain consistency when committing mutations throughout the application.
 
+
+## Application Functions
+Outlined below are some of the functions that the extension can be used for.
+
+### Identify Chatbot
+
+The "Identify Chatbot" function helps users select and identify the chatbot element on a webpage.
+
+- **Purpose:** This function allows users to interactively select the chatbot interface on a webpage, making it easier for the extension to interact with the chatbot in future operations.
+
+- **How to Use:**
+  1. Click the "Identify Chatbot" button in the extension.
+  2. Click on different parts of the chatbot interface. User must click 3 times on different parts of the chatbot to fully identify the entire chatbot element.
+  3. The extension will search for the parent element that connects the 3 clicked elements to determine the chatbot container.
+
+- **Key Features:**
+  - **Confirmation:** Once identified, the chatbot element will briefly flash green to confirm the selection.
+  - The HTML of the identified chatbot element is stored for future use by the extension.
