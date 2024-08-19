@@ -65,7 +65,7 @@ Next, here are some of the basics of how Vue and Vuex work to better understand 
 
 
 ## Application Functions
-Outlined below are some of the functions that the extension can be used for.
+Outlined below are some of the functions that the extension uses.
 
 ### Identify Chatbot
 
@@ -81,6 +81,19 @@ The "Identify Chatbot" function helps users select and identify the chatbot elem
 - **Key Features:**
   - **Confirmation:** Once identified, the chatbot element will briefly flash green to confirm the selection.
   - The HTML of the identified chatbot element is stored for future use by the extension.
+
+### Send Message and Fetch Response
+
+The extension has a button to input a message and fetch the response.
+
+- To input the message, the extension searches for an input field within the chatbot element and places text in this field. The text is retrieved from the [messagesToSend](./src/utils/messagesToSend.ts) file.
+
+- Retrieving the response is more difficult. The method used depends on the root url of the current website.
+  - If it is one of ChatGPT, Claude or Gemini, the extension uses a specific selector for each of the sites that they use for their responses.
+  - If it is something else, it attempts to capture the response by looking for new elements that appear after sending the message.
+      - The response is considered complete when no new text has been added for 5 seconds or the maximum wait time (20 seconds by default) is reached.
+      - To attempt to filter out non-response text, the code checks for common chatbot phrases and typical response patterns (e.g., starting with a capital letter, ending with punctuation).
+  - If a valid response is found, it's stored in the 'responses' object for future reference.
 
 
 ## To Do
