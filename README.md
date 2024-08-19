@@ -98,20 +98,48 @@ The way the extensions currently filters the evaluation results is incorrect. He
 - Check these tested elements to see if they are contained within the chatbot element defined by the user.
 
 #### Possible Implementation
-This detailed description can be found in the [RuleResult.vue](./src/popup/components/RuleResult.vue) module.
+- This detailed description can be found in the [RuleResult.vue](./src/popup/components/RuleResult.vue) module.
 
 ```html
 <highlight-code lang="html">{{element.htmlCode}}</highlight-code>
 ```
 
-`element.htmlCode` is the relevant code here. It contains the element that was evaluated. 
+- `element.htmlCode` is the relevant code here. It contains the element that was evaluated.
 
-Once the element is found, it just has to be checked if it is contained within the chatbot element.
+- Currently the results are filtered in [`content.ts`](./src//content/content.ts).
+  - To filter the results the correct way, they must be filtered after the detailed descriptions are generated in [Loading.vue](./src/popup/router/pages/Loading.vue).
 
 ### Implement Voice Input and Output Detection
 #### Request User to Input Voice
+I tried to implement code that could:
+1. Click the voice input button to start the microphone.
+2. Play the audio clip from the audio folder while the mic is on.
+3. Capture the clip playing from the loud speakers into the microphone so the chatbot could capture the input.
 
-### Replace Best Practices Checks with checks from chatbot package from qualweb
+However, I was unable to find anyway to implement this that worked. Leticia suggested to request the user to speak a certain phrase out loud.
+
+#### Possible Implentation
+- Create a new page in the `src/popup/routes/` directory. (I have already created the empty file `VoiceInput.vue`).
+- On this page, there should be a `<p>` and a `<button>`. The p tag contains the request to the user and the button should be clicked when the user is finished speaking.
+- The script contains the code to transition to the `/loading` route when the button is clicked.
+
+### Retrieving Output of Chatbot
+The extension should be able to retrieve the audio output of the chatbot and use a speech to text service to store the output and compare it to the expected output. The expected output is usually displayed in a text format on the screen.
+
+This can be broken into simpler tasks, including:
+
+- Detecting if the chatbot is outputting audio.
+  - If yes, can be stated to have voice output capabilities.
+- Find a way to capture the voice output of the chatbot, but this is more complex.
+
+### Replace Best Practices Package with Chatbot Package
+Currently, the extension is importing the `best-practices` package from the qualweb repo. I forked the repo and implemented additional rules in the package that the extension is using.
+
+However, Carlos has added a new package, called `cui-checks`, which should be the one used. The code implemented in rule [`QW_BP30`](https://github.com/patbarry29/qualweb/blob/main/packages/best-practices/src/best-practices/QW-BP30.ts) should be imported to `cui-checks`. Then the dependencies in this project can be updated to use the rule coming from the correct package.
 
 ### Check Readability of Chatbot Responses
-Use ChatGPT API to check the readability of the response
+Use ChatGPT API to check the readability of the response. The response given by the chatbot must above a certain readability level.
+
+We decided to attain the level of a response by feeding it to the ChatGPT API after fetching it from the webpage.
+
+If the level is over the recommended level we can try asking the chatbot to respond with a more readable response.
